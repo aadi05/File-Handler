@@ -29,9 +29,10 @@ public class LockedMeMain {
 				choice = Integer.parseInt(sc.nextLine());
 			}
 			catch(Exception e) {
+				System.out.println("Please enter a number!\n");
 				continue;
 			}finally {
-				System.out.println("Please enter a number!\n");
+				System.out.println();
 			}
 			switch (choice) {
 			case 1:
