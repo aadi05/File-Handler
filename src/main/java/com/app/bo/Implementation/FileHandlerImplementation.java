@@ -3,7 +3,6 @@ package com.app.bo.Implementation;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +16,22 @@ import com.app.model.FileHandler;
 public class FileHandlerImplementation implements FileHandlerBO {
 	private static Map<String,FileHandler> fileMap = new HashMap<>();
 	private static int fileId;
+	
+	public FileHandlerImplementation() {
+		File fobj = new File(".");
+		String[] fileNames = fobj.list();
+		if(fileNames.length > 1) {
+			for(String file:fileNames) {
+				fileMap.put(file, new FileHandler(++fileId,file,LocalDateTime.now()));
+			}
+		}
+	}
 
 	@Override
 	public List<FileHandler> listFilesAsc() throws EmptyListException {
 		List<FileHandler> fileList = new ArrayList<>(fileMap.values());
 		if(fileList.isEmpty()) {
-			//throw new EmptyListException("Please add files first!");
+			throw new EmptyListException("Please add files first!");
 		}
 		return fileList;
 	}
@@ -53,7 +62,7 @@ public class FileHandlerImplementation implements FileHandlerBO {
 			fileMap.remove(fileName);
 		}
 		else {
-			//throw new NoFileException("File "+fileName+" doesn't exist!");
+			throw new NoFileException("File "+fileName+" doesn't exist!");
 		}
 		return deletionStatus;
 		
@@ -68,7 +77,7 @@ public class FileHandlerImplementation implements FileHandlerBO {
 			currFile.setLastAccessed(currTime);
 		}
 		else {
-			//throw new NoFileException("File "+fileName+" doesn't exist!");
+			throw new NoFileException("File "+fileName+" not found!");
 		}
 		return currFile;
 	}
